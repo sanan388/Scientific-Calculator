@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <title>Scientific Calculator | Sanan Khalid</title>
+</head>
+<body>
+  <div class="wrapper">
+    <section class="screen" id="display">0</section>
+    <section class="calc-buttons">
+
+      <div class="calc-button-row">
+        <button class="calc-button" onclick="sin()">sin</button>
+        <button class="calc-button" onclick="cos()">cos</button>
+        <button class="calc-button" onclick="tan()">tan</button>
+        <button class="calc-button" onclick="insert('(')">(</button>
+        <button class="calc-button" onclick="insert(')')">)</button>
+      </div>
+
+      <div class="calc-button-row">
+        <button class="calc-button" onclick="square()">x<sup>2</sup></button>
+        <button class="calc-button" onclick="cubed()">x<sup>3</sup></button>
+        <button class="calc-button" onclick="sqrt2()">√</button>
+        <button class="calc-button" onclick="sqrt3()">∛</button>
+      </div>
+
+      <div class="calc-button-row">
+        <button class="calc-button" onclick="ln()">ln</button>
+        <button class="calc-button" onclick="log()">log</button>
+        <button class="calc-button" onclick="insert('π')">π</button>
+        <button class="calc-button" onclick="percent()">%</button>
+      </div>
+
+      <div class="calc-button-row">
+        <button class="calc-button small" onclick="remov()">C</button>
+        <button class="calc-button small" onclick="BACKSPACE()">←</button>
+        <button class="calc-button" onclick="insert('×')">×</button>
+      </div>
+      <div class="calc-button-row">
+        <button class="calc-button" onclick="insert('7')">7</button>
+        <button class="calc-button" onclick="insert('8')">8</button>
+        <button class="calc-button" onclick="insert('9')">9</button>
+        <button class="calc-button" onclick="insert('÷')">÷</button>
+      </div>
+
+      <div class="calc-button-row">
+        <button class="calc-button" onclick="insert('4')">4</button>
+        <button class="calc-button" onclick="insert('5')">5</button>
+        <button class="calc-button" onclick="insert('6')">6</button>
+        <button class="calc-button" onclick="insert('−')">−</button>
+      </div>
+      <div class="calc-button-row">
+        <button class="calc-button" onclick="insert('1')">1</button>
+        <button class="calc-button" onclick="insert('2')">2</button>
+        <button class="calc-button" onclick="insert('3')">3</button>
+        <button class="calc-button" onclick="insert('+')">+</button>
+      </div>
+      
+      <div class="calc-button-row">
+        <button class="calc-button triple" onclick="insert('0')">0</button>
+        <button class="calc-button" onclick="insert('.')">.</button>
+        <button class="calc-button equals" onclick="equal()">=</button>
+      </div>
+    </section>
+  </div>
+
+
+
+  <script src="script.js"></script>
+</body>
+</html>

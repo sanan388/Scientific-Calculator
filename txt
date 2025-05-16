@@ -1,0 +1,393 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<form name="calculator">    
+<table style="margin: 0 auto;">
+        <tr>
+            <td colspan="4"><input type="text" name="result" placeholder="0"
+            style="text-align: right;"></td>
+        </tr>
+        <tr>
+            <td><button type="button" value="sin" onclick="sin()">sin</button>
+            </td>
+            <td><button type="button" value="cos" onclick="cos()">cos</button>
+            </td>
+            <td><button type="button" value="tan" onclick="tan()">tan</button>
+            </td>
+            <td colspan="2"><button type="button" value = "" onclick="remov()" class="clear">C</button>
+            </td>
+        </tr>
+        <tr>
+            <td><button type="button" value="x^2" onclick="square()" >x<sup>2
+            </button></td>
+            <td><button type="button" value="x^3" onclick="cubed()">x<sup>3
+            </button></td>
+            <td><button type="button" value="sqrt2" onclick="sqrt2()">&radic;
+            </button></td>
+            <td><button type="button" value="sqrt3" onclick="sqrt3()"> &#8731;
+            </button></td>
+
+        </tr>
+        <tr>
+            <td><button type="button" value="1" onclick="number(value)">1
+            </button></td>
+            <td><button type="button" value="2" onclick="number(value)">2
+            </button></td>
+            <td><button type="button" value="3" onclick="number(value)">3
+            </button></td>
+            <td><button type="button" value="BACKSPACE" onclick="BACKSPACE()">←
+            </button></td>
+        </tr>
+        <tr>
+            <td><button type="button" value="4" onclick="number(value)">4
+            </button></td>
+            <td><button type="button" value="5" onclick="number(value)">5
+            </button></td>
+            <td><button type="button" value="6" onclick="number(value)">6
+            </button></td>
+            <td><button type="button" value="−" onclick="number(value)">−
+            </button></td>
+        </tr>
+            <td><button type="button" value="7" onclick="number(value)">7
+            </button></td>
+            <td><button type="button" value="8" onclick="number(value)">8
+            </button></td>
+            <td><button type="button" value="9" onclick="number(value)">9
+            </button></td>
+            <td><button type="button" value="÷" onclick="number(value)">÷ 
+            </button></td>
+        <tr>
+            <td><button type="button" value="7" onclick="number(value)">7
+            </button></td>
+            <td><button type="button" value="8" onclick="number(value)">8
+            </button></td>
+            <td><button type="button" value="9" onclick="number(value)">9
+            </button></td>
+            <td><button type="button" value="÷" onclick="number(value)">÷ 
+            </button></td>
+        </tr>
+        <tr>
+            <td><button type="button" value="." onclick="number(value)">.
+            </button></td>
+            <td><button type="button" value="0" onclick="number(value)">0
+            </button></td>
+            <td><button type="button" value="×" onclick="number(value)">×
+            </button></td>
+            <td><button type="button" value="%" onclick="number(value)">% 
+            </button></td>
+        </tr>
+
+        <tr>
+            <td colspan="2"><button type="button" value="=" onclick="equal()"
+            class="equal">=</button></td>
+            <td><button type="button" value="+" onclick="number(value)">+</button></td>
+        </tr>
+    </table>
+</form>
+
+<script type="text/javascript">
+    function sin(){
+        document.calculator.result.value = Math.sin(document.calculator.result.value);
+    }
+    function cos(){
+        document.calculator.result.value=Math.cos(document.calculator.result.value);
+    }
+    function tan(){
+        document.calculator.result.value=Math.tan(document.calculator.result.value);
+    }
+    function BACKSPACE(){
+        var a = document.calculator.result.value;
+        document.calculator.result.value = a.substr(0, a.length-1);
+    }
+    function square(){
+        document.calculator.result.value = Math.pow(document.calculator.result.value, 2);
+    }
+    function cubed(){
+        document.calculator.result.value = Math.pow(document.calculator.result.value, 3);
+    }
+    function sqrt2(){
+        document.calculator.result.value = Math.pow(document.calculator.result.value, 1/2);
+    }
+    function sqrt3(){
+        document.calculator.result.value = Math.pow(document.calculator.result.value, 1/3);
+    }
+    function number(value){
+        document.calculator.result.value += value; 
+    }
+    function remov(value){
+        document.calculator.result.value =" ";
+    }
+    function equal(){
+        document.calculator.result.value = eval(document.calculator.result.value)
+    }
+</script>
+</body>
+</html> -->
+
+
+let runningTotal = 0;
+let buffer = "0";
+let previousOperator;
+let expression = '';
+
+const screen = document.getElementById('display');
+
+const FUNCTIONS = {
+  'ln': 'Math.log(',
+  'log': 'Math.log10(',
+  '√': 'Math.sqrt(',
+  'x': '**',
+  '%': '/100',
+  'π': 'Math.PI'
+};
+
+function buttonClick(value) {
+  if (FUNCTIONS.hasOwnProperty(value)) {
+    // handle scientific functions
+    if (value === '%') {
+      expression += FUNCTIONS[value];
+      buffer = evaluateExpression(expression).toString();
+      expression = buffer;
+    } else if (value === 'π') {
+      expression += FUNCTIONS[value];
+      buffer = FUNCTIONS[value];
+    } else if (value === '^') {
+      expression += value;
+    } else {
+      expression += FUNCTIONS[value];
+    }
+  } else if (value === '(' || value === ')') {
+    expression += value;
+  } else if (isNaN(value)) {
+    handleSymbol(value);
+  } else {
+    handleNumber(value);
+  }
+  screen.innerText = expression || '0';
+}
+
+function handleSymbol(symbol) {
+  switch (symbol) {
+    case 'C':
+      buffer = '0';
+      runningTotal = 0;
+      expression = '';
+      break;
+    case '=':
+      if (expression === '') return;
+      buffer = evaluateExpression(expression).toString();
+      expression = buffer;
+      runningTotal = 0;
+      previousOperator = null;
+      break;
+    case '←':
+      expression = expression.slice(0, -1);
+      buffer = expression;
+      if (expression === '') buffer = '0';
+      break;
+    case '+':
+    case '−':
+    case '×':
+    case '÷':
+      handleMath(symbol);
+      break;
+  }
+  screen.innerText = expression || '0';
+}
+
+function handleMath(symbol) {
+  if (buffer === '0') {
+    buffer = expression.slice(0, -1);
+  }
+  const intBuffer = parseFloat(buffer);
+  if (runningTotal === 0) {
+    runningTotal = intBuffer;
+  } else {
+    flushOperation(intBuffer);
+  }
+  previousOperator = symbol;
+  expression += symbol;
+  buffer = '0';
+}
+
+function flushOperation(intBuffer) {
+  switch (previousOperator) {
+    case '+': runningTotal += intBuffer; break;
+    case '−': runningTotal -= intBuffer; break;
+    case '×': runningTotal *= intBuffer; break;
+    case '÷': runningTotal /= intBuffer; break;
+  }
+}
+
+function handleNumber(numberString) {
+  if (buffer === '0') {
+    buffer = numberString;
+  } else {
+    buffer += numberString;
+  }
+  expression += numberString;
+}
+
+function evaluateExpression(expr) {
+  let jsExpr = expr.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-');
+  // balance parentheses
+  const openFuncs = (jsExpr.match(/Math\./g) || []).length;
+  const closes = (jsExpr.match(/\)/g) || []).length;
+  jsExpr += ')'.repeat(openFuncs - closes);
+  return eval(jsExpr);
+}
+
+function init() {
+  document.querySelector('.calc-buttons').addEventListener('click', function(e) {
+    if (e.target.matches('button')) {
+      const val = e.target.innerText.trim();
+      buttonClick(val);
+    }
+  });
+}
+
+init();
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <title>Scientific Calculator | Sanan Khalid</title>
+</head>
+<body>
+  <div class="wrapper">
+    <section class="screen" id="display">0</section>
+    <section class="calc-buttons">
+      <!-- Scientific row 1 -->
+      <div class="calc-button-row">
+        <button class="calc-button" onclick="sin()">sin</button>
+        <button class="calc-button" onclick="cos()">cos</button>
+        <button class="calc-button" onclick="tan()">tan</button>
+        <button class="calc-button double" onclick="remov()">C</button>
+      </div>
+      <!-- Scientific row 2 -->
+      <div class="calc-button-row">
+        <button class="calc-button" onclick="square()">x<sup>2</sup></button>
+        <button class="calc-button" onclick="cubed()">x<sup>3</sup></button>
+        <button class="calc-button" onclick="sqrt2()">√</button>
+        <button class="calc-button" onclick="sqrt3()">∛</button>
+      </div>
+      <!-- Scientific row 3 -->
+      <div class="calc-button-row">
+        <button class="calc-button" onclick="ln()">ln</button>
+        <button class="calc-button" onclick="log()">log</button>
+        <button class="calc-button" onclick="insert('π')">π</button>
+        <button class="calc-button" onclick="percent()">%</button>
+      </div>
+      <!-- Parentheses & backspace -->
+      <div class="calc-button-row">
+        <button class="calc-button" onclick="insert('(')">(</button>
+        <button class="calc-button" onclick="insert(')')">)</button>
+        <button class="calc-button" onclick="BACKSPACE()">←</button>
+        <button class="calc-button" onclick="insert('÷')">÷</button>
+      </div>
+      <!-- Digit rows -->
+      <div class="calc-button-row">
+        <button class="calc-button" onclick="insert('7')">7</button>
+        <button class="calc-button" onclick="insert('8')">8</button>
+        <button class="calc-button" onclick="insert('9')">9</button>
+        <button class="calc-button" onclick="insert('×')">×</button>
+      </div>
+      <div class="calc-button-row">
+        <button class="calc-button" onclick="insert('4')">4</button>
+        <button class="calc-button" onclick="insert('5')">5</button>
+        <button class="calc-button" onclick="insert('6')">6</button>
+        <button class="calc-button" onclick="insert('−')">−</button>
+      </div>
+      <div class="calc-button-row">
+        <button class="calc-button" onclick="insert('1')">1</button>
+        <button class="calc-button" onclick="insert('2')">2</button>
+        <button class="calc-button" onclick="insert('3')">3</button>
+        <button class="calc-button" onclick="insert('+')">+</button>
+      </div>
+      <div class="calc-button-row">
+        <button class="calc-button triple" onclick="insert('0')">0</button>
+        <button class="calc-button" onclick="insert('.')">.</button>
+        <button class="calc-button equals" onclick="equal()">=</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+
+// script.js
+
+// Retrieve the display element
+const display = document.getElementById('display');
+
+// Helper to get the current numeric value from the display
+function currentValue() {
+  return parseFloat(display.innerText) || 0;
+}
+
+// Helper to update the display
+function update(val) {
+  display.innerText = val;
+}
+
+// Clear the display entirely
+function remov() {
+  update('0');
+}
+
+// Remove the last character (backspace)
+function BACKSPACE() {
+  const text = display.innerText;
+  const newText = text.length > 1 ? text.slice(0, -1) : '0';
+  update(newText);
+}
+
+// Insert a character or symbol into the display
+function insert(char) {
+  if (display.innerText === '0') {
+    update(char);
+  } else {
+    update(display.innerText + char);
+  }
+}
+
+// Evaluate the expression shown on the display
+function equal() {
+  try {
+    // Replace our symbols with JS equivalents
+    const expr = display.innerText
+      .replace(/×/g, '*')
+      .replace(/÷/g, '/')
+      .replace(/−/g, '-')
+      .replace(/π/g, Math.PI.toString());
+    const result = eval(expr);
+    update(result);
+  } catch {
+    update('Error');
+  }
+}
+
+// Scientific functions
+function sin()     { update(Math.sin(currentValue())); }
+function cos()     { update(Math.cos(currentValue())); }
+function tan()     { update(Math.tan(currentValue())); }
+function square()  { update(Math.pow(currentValue(), 2)); }
+function cubed()   { update(Math.pow(currentValue(), 3)); }
+function sqrt2()   { update(Math.sqrt(currentValue())); }
+function sqrt3()   { update(Math.cbrt(currentValue())); }
+function ln()      { update(Math.log(currentValue())); }
+function log()     { update(Math.log10(currentValue())); }
+function percent() { update(currentValue() / 100); }
